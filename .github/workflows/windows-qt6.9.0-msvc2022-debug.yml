@@ -60,10 +60,10 @@ jobs:
             -DCMAKE_MESSAGE_LOG_LEVEL=STATUS ^
             -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} ^
             -DCMAKE_CXX_COMPILER=${{ matrix.cxx_compiler }} ^
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_types }} ^
+            -DCMAKE_BUILD_TYPE=Debug ^
             -GNinja
           cd ${{ steps.strings.outputs.build-output-dir }}
-          cmake --build . --config ${{ matrix.build_types }} --parallel --target all --
+          cmake --build . --config Debug --parallel --target all --
           cmake --install .
           
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
@@ -82,7 +82,7 @@ jobs:
           # 创建文件夹
           New-Item -ItemType Directory dist
           # 拷贝生成文件
-          Copy-Item bin\Release\* dist -Force -Recurse | Out-Null
+          Copy-Item bin\Debug\* dist -Force -Recurse | Out-Null
           # 删除Qt生成的多余文件
           $excludeList = @("${{ env.fileName }}.qmltypes", "${{ env.fileName }}_qml_module_dir_map.qrc", "qmldir")
           Remove-Item -Path dist -Include $excludeList -Recurse -Force
